@@ -4,17 +4,33 @@
   "description": "Streams a singleton redux state selector to one or more contexts (components or objects) within a react-redux application.",
   "main": "lib/index.js",
   "scripts": {
-    "start": "babel src/lib -d lib --watch",
-    "prebuild": "rimraf build",
+    "start": "npm run test-watch",
+    "clean": "run-p clean-lib clean-doc clean-test",
+    "clean-lib": "rimraf lib",
+    "clean-doc": "rimraf doc",
+    "clean-test": "rimraf coverage.lcov",
+    "prebuild": "npm run clean",
     "build": "babel src/lib -d lib",
-    "predoc": "rimraf doc",
-    "doc": "esdoc -c ./esdoc.json",
-    "prerelease": "npm run build",
+    "build-watch": "npm run build -- --watch",
+    "test-mocha": "mocha --harmony --es_staging --require test/require",
+    "test": "nyc npm run test-mocha",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "test-watch": "npm run test-mocha -- --watch",
+    "prerelease": "run-s build test",
     "release": "npm version patch && npm publish",
-    "postrelease": "npm run release-doc",
-    "prerelease-doc": "npm run doc",
-    "release-doc": "git subtree push --prefix doc origin gh-pages",
-    "postrelease-doc": "git commit -am \"doc-release\" && git push --follow-tags"
+    "postrelease": "npm run release-gh-pages",
+    "prerelease-gh-pages": "npm run doc",
+    "release-gh-pages": "run-s gh-pages-subtree gh-pages-push gh-pages-delete",
+    "postrelease-gh-pages": "run-s clean-doc git-save git-push",
+    "predoc": "rimraf doc",
+    "doc": "esdoc -c ./esdoc.json && ncp CNAME doc/CNAME",
+    "postdoc": "npm run git-save",
+    "gh-sync": "ncp src ../../../fire-hydrant/src && ncp test ../../../fire-hydrant/test && ncp package.json ../../../fire-hydrant/package.json && ncp README.md ../../../fire-hydrant/README.md",
+    "gh-pages-subtree": "git subtree split --prefix doc -b gh-pages",
+    "gh-pages-push": "git push -f origin gh-pages:gh-pages",
+    "gh-pages-delete": "git branch -D gh-pages",
+    "git-save": "git add -A && git commit -am \"deployment\"",
+    "git-push": "git push -u origin master --follow-tags"
   },
   "dependencies": {
     "eventemitter3": "latest",
@@ -35,10 +51,11 @@
     "eslint": "latest",
     "eslint-plugin-babel": "latest",
     "eslint-plugin-react": "latest",
-    "ncp": "latest",
-    "nyc": "latest",
-    "npm-run-all": "latest",
     "mocha": "latest",
+    "ncp": "latest",
+    "npm-run-all": "latest",
+    "nyc": "latest",
+    "rewire": "latest",
     "rimraf": "latest"
   },
   "repository": {
@@ -50,5 +67,5 @@
   "bugs": {
     "url": "https://github.com/noderaider/react-redux-stream/issues"
   },
-  "homepage": "https://react-redux-stream.js.org"
+  "homepage": "https://noderaider.js.org/react-redux-stream"
 }
