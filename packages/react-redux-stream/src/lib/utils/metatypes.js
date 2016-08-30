@@ -10,7 +10,6 @@ const symbolRegistry = (
   , genericType: symbols.genericType
   , genericTypes: symbols.genericTypes
   , instanceType: symbols.instanceType
-  , creator: symbols.creator
   }
 )
 const symbolEntries = Object.entries(symbolRegistry)
@@ -29,17 +28,14 @@ export const reflect = Object.freeze (
 
 /** Factory that imbues objects with symbol type information and type utils. */
 export default function metaTypes (rootTypeName, ...genericTypeNames) {
-  const genericTypeName = generic.length > 0 ? generic.join(',') : noop()
+  const genericTypeName = genericTypeNames.length > 0 ? genericTypeNames.join(',') : noop()
   const typeName = `${rootTypeName}${genericTypeName ? `<${genericTypeName}>` : ''}`
-  const caller = metaTypes.caller || noop()
-  const creator = caller ? reflect(caller) : noop()
 
   const typedProps = (
     { [symbols.type]: typeName
     , [symbols.rootType]: typeName
     , [symbols.genericType]: genericTypeName
     , [symbols.genericTypes]: genericTypeNames
-    , [symbols.creator]: creator
     }
   )
 

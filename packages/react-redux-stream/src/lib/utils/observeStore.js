@@ -3,7 +3,7 @@ import stats from './stats'
 const should = require('chai').should()
 
 /** Observes redux store and pushes changes triggering a different state selection value */
-function observeStore(store, select, onChange) {
+export default function observeStore(store, select, onChange) {
   should.exist(store)
   should.exist(select)
   should.exist(onChange)
@@ -26,6 +26,5 @@ function observeStore(store, select, onChange) {
 
   let unsubscribe = store.subscribe(handleChange)
   handleChange()
-  define.strictProperty(store.subscribe(handleChange), )
   return unsubscribe
 }

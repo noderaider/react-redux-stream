@@ -37,7 +37,7 @@ export default function Stream (streamKey, storeSelector, sharedContext = {}) {
   return (
     { attach
     , context: propStream.context
-    , get current() { return propStream.current }
+    , get current() { return propStream.current() }
     }
   )
 }
