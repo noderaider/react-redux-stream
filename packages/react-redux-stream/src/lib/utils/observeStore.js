@@ -11,16 +11,25 @@ export default function observeStore(store, select, onChange) {
   onChange.should.be.instanceof(Function)
   let currentState
 
-  const counts = { observed: 0, skipped: 0 }
+  const counts = { __proto__: null }
+  const resetCounts = () => {
+    counts.observed = 0
+    counts.bypassed = 0
+  }
+  const observe = () => { counts.observed++ }
+  const bypass = () => { counts.bypassed++ }
+  resetCounts()
+
 
   function handleChange() {
-    counts.change++
+    observe()
     let nextState = select(store.getState())
     if (nextState === currentState)
-      return counts.skipped++
+      return bypass()
 
-    stats('observe', { ...counts, saved: counts.observed - counts.skipped })
     currentState = nextState
+    stats(`react-redux-stream: ${JSON.stringify(counts)}`, currentState)
+    resetCounts()
     onChange(currentState)
   }
 

@@ -22,14 +22,12 @@ export default function createPropStream (publicKey, sharedContext = {}) {
 
 
   function set (value) {
-    console.warn('SET VALUE', publicKey, value)
     should.exist(value, 'value must exist to set in stream')
     EE.emit(symbols.set, value)
     return value
   }
 
   function listener (value) {
-    console.warn('LISTENER', publicKey, value)
     if(_contexts.some(x => x === undefined || x === null))
       console.warn('Context does not exist, you may not be cleaning up resources')
     should.exist(value, 'incoming prop stream value must exist')
@@ -37,21 +35,18 @@ export default function createPropStream (publicKey, sharedContext = {}) {
   }
 
   function listen () {
-    console.warn('LISTEN', publicKey)
     EE.listeners(symbols.set).length.should.equal(0, 'Max of one listener allowed per prop stream')
     EE.on(symbols.set, listener)
     return dispose
   }
 
   function dispose () {
-    console.warn('DISPOSE', publicKey)
     EE.listeners(symbols.set).length.should.equal(1, 'No listener running on prop stream. Did you forget to call listen?')
     EE.removeListener(symbols.set, listener)
     return listen
   }
 
   function context(_context, requireValue = false) {
-    console.warn('CONTEXT', publicKey, _context, requireValue)
     if(requireValue) should.exist(_value, 'value must be set prior to stream creation')
     define.strictProperty(_context, publicKey, { get() { return _value } }).should.be.true
 
@@ -60,7 +55,6 @@ export default function createPropStream (publicKey, sharedContext = {}) {
     return _context
   }
 
-  console.warn('SINGLETON', publicKey)
   return Object.freeze( { ...metaType.typedProps
                         , set
                         , context
