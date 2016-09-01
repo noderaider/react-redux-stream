@@ -8,13 +8,11 @@ describe('lib', function() {
     it('should have default export', () => should.exist(lib.default))
   })
 
-  const proto = { __proto__: null
-                , symbols: { unique: Symbol('unique')
-                }
+  const proto = { symbols: { unique: Symbol('unique') }
                 }
 
   const state = (
-    { __proto__: { __proto__: null, i: 0 }
+    { __proto__: proto
     , stringKey: 'string-key'
     , _: { unique: Symbol('unique') }
     , get unique() { this.i++ }

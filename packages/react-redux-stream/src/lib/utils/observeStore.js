@@ -11,7 +11,7 @@ export default function observeStore(store, select, onChange) {
   onChange.should.be.instanceof(Function)
   let currentState
 
-  const counts = { __proto__: null }
+  const counts = {}
   const resetCounts = () => {
     counts.observed = 0
     counts.bypassed = 0

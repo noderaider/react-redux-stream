@@ -1,6 +1,5 @@
 const strictAttributes = (
-  { __proto__: null
-  , enumerable: false
+  { enumerable: false
   , configurable: false
   }
 )
@@ -15,7 +14,7 @@ export function strictProperty(target, propertyKey, attributes, flags = {}) {
 
 /** Defines a property on an object with strict privatish defaults. */
 export function symbolProperties(target, symbols, flags = {}) {
-  return Object.entries(symbols).reduce((_target, [symbolKey, value]) => {
+  return Object.entries(symbols).reduce((_target, [ symbolKey, value ]) => {
     const result = define.strictProperty(_target, symbolKey, { value }, { pipe: true })
     if(flags.throws && !result)
       throw new TypeError(`Could not assign strict property to target type "${typeof _target}"`)

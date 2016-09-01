@@ -4,8 +4,7 @@ import * as define from './define'
 const noop = () => {}
 
 const symbolRegistry = (
-  { __proto__: null
-  , type: symbols.type
+  { type: symbols.type
   , rootType: symbols.rootType
   , genericType: symbols.genericType
   , genericTypes: symbols.genericTypes
@@ -67,8 +66,7 @@ export default function metaTypes (rootTypeName, ...genericTypeNames) {
   )
 
   const utils = Object.freeze(
-    { __proto__: null
-    , typedProps
+    { typedProps
     , ...namedProps
     , flags
     , reflect
@@ -80,8 +78,7 @@ export default function metaTypes (rootTypeName, ...genericTypeNames) {
 
   const instance = function (...path) {
     return (
-      { __proto__: null
-      , ...typedProps
+      { ...typedProps
       , [symbols.instanceType]: path.reduce((reduction, x) => `${reduction}#${x}`, 'instance')
       }
     )
