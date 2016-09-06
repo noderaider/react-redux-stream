@@ -9,6 +9,7 @@
 
                           /** START SCRIPT STARTS BUILD WITH WATCHING ENABLED (USEFUL WITH NPM LINK) */
 export default ({}) => ({ 'start': 'run-p -lnc build-watch test-watch'
+                        , 'flow': 'flow; test $? -eq 0 -o $? -eq 2'
 
                           /** CLEAN EVERYTHING PRE BUILD */
                         , 'clean': 'run-p clean-lib clean-doc clean-test'
