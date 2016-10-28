@@ -10,7 +10,7 @@ const should = require('chai').should()
  * @param  {Object} sharedContext An optional shared context to sync (useful for globals and debugging).
  * @return {Object}               An object with controls for attaching and streaming to contexts.
  */
-export default function createPropStream (publicKey, sharedContext = {}) {
+export default function createPropStream (publicKey, sharedContext = {}, opts = {}) {
   let _value
   let metaType = metaTypes('propStream', publicKey)
 
@@ -65,7 +65,7 @@ export default function createPropStream (publicKey, sharedContext = {}) {
                         , get contexts() { return _contexts }
                         , current: () => {
                             if(_value === undefined)
-                              console.trace('prop stream must have a value set prior to polling current value')
+                              console.warn('prop stream must have a value set prior to polling current value')
                             return _value
                           }
                         })

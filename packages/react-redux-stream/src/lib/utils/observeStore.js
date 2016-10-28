@@ -3,7 +3,7 @@ import stats from './stats'
 const should = require('chai').should()
 
 /** Observes redux store and pushes changes triggering a different state selection value */
-export default function observeStore(store, select, onChange) {
+export default function observeStore(store, select, onChange, opts = {}) {
   should.exist(store)
   should.exist(select)
   should.exist(onChange)
@@ -18,18 +18,22 @@ export default function observeStore(store, select, onChange) {
   }
   const observe = () => { counts.observed++ }
   const bypass = () => { counts.bypassed++ }
-  resetCounts()
+  if(opts.verbose)
+    resetCounts()
 
 
   function handleChange() {
-    observe()
+    if(opts.verbose)
+      observe()
     let nextState = select(store.getState())
     if (nextState === currentState)
-      return bypass()
+      return opts.verbose ? bypass() : null
 
     currentState = nextState
-    stats(`react-redux-stream: ${JSON.stringify(counts)}`, currentState)
-    resetCounts()
+    if(opts.verbose) {
+      stats(`react-redux-stream: ${JSON.stringify(counts)}`, currentState)
+      resetCounts()
+    }
     onChange(currentState)
   }
 

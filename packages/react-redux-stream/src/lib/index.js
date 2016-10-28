@@ -1,6 +1,5 @@
 import createPropStream from './utils/createPropStream'
 import observeStore from './utils/observeStore'
-import stats from './utils/stats'
 import * as define from './utils/define'
 const should = require('chai').should()
 
@@ -8,11 +7,13 @@ const should = require('chai').should()
  * Creates a streaming context that updates a target context that
  * can be attached to a store and streamed to one or more contexts
  */
-export default function Stream (streamKey, storeSelector, sharedContext = {}) {
+export default function Stream (streamKey, storeSelector, sharedContext = {}, { verbose = false } = {}) {
   should.exist(streamKey, 'must specify a key to stream to context')
   should.exist(storeSelector, 'must specify a storeSelector factory function')
 
-  const propStream = createPropStream (streamKey, sharedContext)
+  const opts = { verbose }
+
+  const propStream = createPropStream (streamKey, sharedContext, opts)
 
   let isAttached = false
   function attach (store) {
@@ -24,7 +25,7 @@ export default function Stream (streamKey, storeSelector, sharedContext = {}) {
     should.exist(select)
     select.should.be.instanceof(Function)
 
-    const unsubscribe = observeStore(store, select, propStream.set)
+    const unsubscribe = observeStore(store, select, propStream.set, opts)
 
     function detach () {
       unsubscribe()
