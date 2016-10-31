@@ -1,6 +1,6 @@
 {
   "name": "react-redux-stream",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Streams a singleton redux state selector to one or more contexts (components or objects) within a react-redux application.",
   "main": "lib/index.js",
   "scripts": {
